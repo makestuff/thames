@@ -4,7 +4,7 @@
 # are generated from the tide-tables using this script. Call it with any year 2017..2022, and it
 # will produce valid Javascript array-initializers. For example:
 #
-#   $ grep -E "const (times|depths)" index.html > x
+#   $ grep -E "const (times|depths|names)" index.html > x
 #   $ ./json2js.py 2022 > y
 #   $ diff x y
 #   $
@@ -50,7 +50,7 @@ times = [[int((last_of(loc)[0] - zerotime).total_seconds()/60)] for loc in tides
 depths = [[last_of(loc)[3]] for loc in tides]
 
 # Now extend with the data from this year
-_, _, tides = get_tides(year)
+_, locations, tides = get_tides(year)
 num_results = min([len(r) for r in tides])
 for j in range(len(tides)):
   times[j].extend([int((tides[j][i][0]-zerotime).total_seconds()/60) for i in range(num_results)])
@@ -59,3 +59,4 @@ for j in range(len(tides)):
 # And finally, print it
 print(f"            const times = {times};");
 print(f"            const depths = {depths};");
+print(f"            const names = {locations};");
